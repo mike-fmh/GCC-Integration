@@ -41,6 +41,10 @@ public class GCCCompileCurrentFileAction extends AnAction {
                 return;
             }
             System.out.println(filePath);
+
+            VirtualFile[] openedFiles = FileEditorManager.getInstance(project).getSelectedFiles();
+            System.out.println(openedFiles);
+
         }
     }
 }

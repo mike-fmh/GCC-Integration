@@ -28,7 +28,8 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
+        <toolWindow id="GCC Output" anchor="bottom" factoryClass="pycharmgcc.ConsoleWindowFactory"/>
+        <postStartupActivity implementation="pycharmgcc.PyCharmGCCStartup"/>
     </extensions>
     <actions>
         <action id="GccCompileCurrentFile"
