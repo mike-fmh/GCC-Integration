@@ -30,4 +30,12 @@
     <extensions defaultExtensionNs="com.intellij">
 
     </extensions>
+    <actions>
+        <action id="GccCompileCurrentFile"
+                class="pycharmgcc.GCCCompileCurrentFileAction"
+                text="Compile Current C File with GCC"
+                description="Compile the current C file with GCC">
+            <keyboard-shortcut keymap="$default" first-keystroke="control alt G"/>
+        </action>
+    </actions>
 </idea-plugin>
