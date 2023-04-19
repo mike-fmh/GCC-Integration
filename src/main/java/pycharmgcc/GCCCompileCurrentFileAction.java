@@ -1,5 +1,7 @@
 package pycharmgcc;
 
+import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Document;
@@ -8,8 +10,12 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
+import com.intellij.ui.content.Content;
+import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 
 public class GCCCompileCurrentFileAction extends AnAction {
@@ -45,6 +51,20 @@ public class GCCCompileCurrentFileAction extends AnAction {
             VirtualFile[] openedFiles = FileEditorManager.getInstance(project).getSelectedFiles();
             System.out.println(openedFiles);
 
+            ConsoleView console = project.getUserData(PyCharmGCCStartup.CONSOLE_VIEW_KEY);
+            if (console == null) {
+                return;
+            }
+            ContentFactory contentFactory = ContentFactory.getInstance();
+            Content content = contentFactory.createContent(console.getComponent(), "", true);
+            ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("GCC Output");
+            if (toolWindow == null) {
+                return;
+            }
+            toolWindow.getContentManager().addContent(content);
+
+            console.print(filePath, ConsoleViewContentType.NORMAL_OUTPUT);
+            toolWindow.activate(null);
         }
     }
 }
