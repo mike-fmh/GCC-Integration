@@ -15,9 +15,9 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    Add keyboard shortcut for the GCC compiler to PyCharm.
+    Add keyboard shortcut for the GCC compiler to PyCharm (GCC must be already installed and in your system PATH).
 
-    Default cntrl + alt + G
+    Default alt + G
 
     If the current file is .c or .cpp, using the keyboard shortcut will create an executable for it. Upon successful compilation, the resulting executable will then be run in a tool window.
   ]]></description>
@@ -37,7 +37,7 @@
                 class="pycharmgcc.GCCCompileCurrentFileAction"
                 text="Compile Current File"
                 description="PyCharmGCC tries to compile the active file with GCC. Upon a successful compilation, the file will also be run.">
-            <keyboard-shortcut keymap="$default" first-keystroke="control alt G"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt G"/>
         </action>
     </actions>
 </idea-plugin>
