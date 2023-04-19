@@ -1,4 +1,4 @@
-package pycharmgcc;
+package gccIntegration;
 
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.project.Project;

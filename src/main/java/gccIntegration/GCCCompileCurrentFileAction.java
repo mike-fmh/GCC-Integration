@@ -1,4 +1,4 @@
-package pycharmgcc;
+package gccIntegration;
 
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.execution.ui.ConsoleView;
@@ -186,37 +186,39 @@ public class GCCCompileCurrentFileAction extends AnAction {
             curFileType = curFileName.substring(lastIndex + 1);
         }
 
-        if (SystemInfo.isWindows) {
-            // if it's a Windows system, executables should be .exe
-            outname = curFileName.substring(0, curFileName.lastIndexOf('.')) + ".exe";
-            outpath = filePath.substring(0, filePath.lastIndexOf('.')) + ".exe";
-        }
-        else {
-            // otherwise just trim off the whole file type
-            // in macOS & Linux, no file type usually means it's executable
-            outname = curFileName.substring(0, curFileName.lastIndexOf('.'));
-            outpath = filePath.substring(0, filePath.lastIndexOf('.'));
-        }
+        if (curFileType != null) {
+            if (SystemInfo.isWindows) {
+                // if it's a Windows system, executables should be .exe
+                outname = curFileName.substring(0, curFileName.lastIndexOf('.')) + ".exe";
+                outpath = filePath.substring(0, filePath.lastIndexOf('.')) + ".exe";
+            } else {
+                // otherwise just trim off the whole file type
+                // in macOS & Linux, no file type usually means it's executable
+                outname = curFileName.substring(0, curFileName.lastIndexOf('.'));
+                outpath = filePath.substring(0, filePath.lastIndexOf('.'));
+            }
 
-        clearConsole();
+            // determine if we need to use GCC or G++ (.c or .cpp)
+            Pair<Integer, String> cmdRet = null;
+            if (curFileType.equals("c")) {
+                clearConsole();
+                cmdRet = runGcc(psiFile, outname);
+            } else if (curFileType.equals("cpp")) {
+                clearConsole();
+                cmdRet = runGplus(psiFile, outname);
+            }
 
-        // determine if we need to use GCC or G++ (.c or .cpp)
-        Pair<Integer, String> cmdRet = null;
-        if (curFileType.equals("c")) {
-            cmdRet = runGcc(psiFile, outname);
-        }
-        else {
-            cmdRet = runGplus(psiFile, outname);
+            if (cmdRet != null) {
+                Integer cmdCode = cmdRet.getLeft();
+                String cmdOut = cmdRet.getRight();
 
-        }
-        Integer cmdCode = cmdRet.getLeft();
-        String cmdOut = cmdRet.getRight();
+                consoleWrite(cmdOut);
 
-        consoleWrite(cmdOut);
-
-        if (cmdCode == 0) {
-            consoleWrite("Saved compiled executable as " + outpath + "\n");
-            runExecutable(outpath);
+                if (cmdCode == 0) {
+                    consoleWrite("Saved compiled executable as " + outpath + "\n");
+                    runExecutable(outpath);
+                }
+            }
         }
     }
 }
