@@ -2,7 +2,8 @@
 <idea-plugin>
     <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
     <id>com.mikefmh.PyCharmGCC</id>
-
+    <version>0.1</version>
+    <idea-version since-build="200"/>
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
     <name>PyCharmGCC</name>
@@ -18,7 +19,7 @@
 
     Default cntrl + alt + G
 
-    If the current file is .c or .cpp, using the keyboard shortcut will create an executable for it.
+    If the current file is .c or .cpp, using the keyboard shortcut will create an executable for it. Upon successful compilation, the resulting executable will then be run in a tool window.
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
@@ -34,8 +35,8 @@
     <actions>
         <action id="GccCompileCurrentFile"
                 class="pycharmgcc.GCCCompileCurrentFileAction"
-                text="Compile Current C File with GCC"
-                description="Compile the current C file with GCC">
+                text="Compile Current File"
+                description="PyCharmGCC tries to compile the active file with GCC. Upon a successful compilation, the file will also be run.">
             <keyboard-shortcut keymap="$default" first-keystroke="control alt G"/>
         </action>
     </actions>
