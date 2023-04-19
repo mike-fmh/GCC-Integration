@@ -1,5 +1,6 @@
 package pycharmgcc;
 
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -141,19 +142,27 @@ public class GCCCompileCurrentFileAction extends AnAction {
         catch (NullPointerException ex) {
             return;
         }
-        System.out.println(filePath);
 
         VirtualFile[] openedFiles = FileEditorManager.getInstance(thisProject).getSelectedFiles();
-        System.out.println(openedFiles);
-
-
         String curFileName = openedFiles[0].getName();
-        String outname = curFileName.substring(0, curFileName.lastIndexOf('.')); // trim the filetype of the filename
-        String outpath = filePath.substring(0, filePath.lastIndexOf('.'));
-        clearConsole();
+        String outname = null;
+        String outpath = null;
+        if (SystemInfo.isWindows) {
+            // if it's a Windows system, executables should be .exe
+            outname = curFileName.substring(0, curFileName.lastIndexOf('.')) + ".exe";
+            outpath = filePath.substring(0, filePath.lastIndexOf('.')) + ".exe";
+        }
+        else {
+            // otherwise just trim off the whole file type
+            // in macOS & Linux, no file type usually means it's executable
+            outname = curFileName.substring(0, curFileName.lastIndexOf('.'));
+            outpath = filePath.substring(0, filePath.lastIndexOf('.'));
+        }
+
         Pair<Integer, String> cmdRet = runGcc(psiFile, outname);
         Integer cmdCode = cmdRet.getLeft();
         String cmdOut = cmdRet.getRight();
+        clearConsole();
         consoleWrite(cmdOut);
 
         if (cmdCode == 0) {
@@ -162,4 +171,3 @@ public class GCCCompileCurrentFileAction extends AnAction {
         }
     }
 }
-
