@@ -16,9 +16,9 @@
     <description><![CDATA[
     Add keyboard shortcut for the GCC compiler to PyCharm.
 
-    Default `cntrl + alt + G`
+    Default cntrl + alt + G
 
-    If the current file is `.c` or `.cpp`, using the keyboard shortcut will create an executable for it.
+    If the current file is .c or .cpp, using the keyboard shortcut will create an executable for it.
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
