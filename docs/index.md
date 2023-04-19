@@ -11,3 +11,4 @@ The default keyboard shortcut is `alt + G`.
 
 If the file that's open in the editor is of type .c or .cpp, press `alt + G` to send it straight to the GCC/G++ compiler in a new IDE Tool Window. If the file successfully compiles, this plugin will also run the created executable in the same toolwindow.
   
+![preview](plugin-preview.png)
