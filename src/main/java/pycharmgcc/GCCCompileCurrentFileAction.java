@@ -29,6 +29,7 @@ public class GCCCompileCurrentFileAction extends AnAction {
 
     private Pair<Integer, String> runGcc(PsiFile targetPsiFile, String outputName) {
         // Run gcc and save the resulting file in the same directory
+        consoleWrite("Compiling using GCC\n");
         Integer exitCode = 0;
         StringBuilder ret = new StringBuilder();
         VirtualFile vFile = targetPsiFile.getOriginalFile().getVirtualFile();
@@ -56,6 +57,36 @@ public class GCCCompileCurrentFileAction extends AnAction {
             }
         } catch (IOException | InterruptedException ex) {
             ret.append("Error executing gcc command: ").append(ex.getMessage()).append("\n");
+        }
+        return Pair.of(exitCode, ret.toString());
+    }
+
+    private Pair<Integer, String> runGplus(PsiFile targetPsiFile, String outputName) {
+        // Run the same as runGcc, but uses g++ instead (for .cpp files)
+        consoleWrite("Compiling using G++\n");
+        Integer exitCode = 0;
+        StringBuilder ret = new StringBuilder();
+        VirtualFile vFile = targetPsiFile.getOriginalFile().getVirtualFile();
+        String filepath = vFile.getPath();
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder("g++", filepath, "-o", outputName);
+            processBuilder.directory(new File(targetPsiFile.getContainingDirectory().getVirtualFile().getPath()));
+            processBuilder.redirectErrorStream(true); // we want to be able to print errors
+            Process process = processBuilder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                ret.append(line).append("\n");
+            }
+            reader.close();
+            exitCode = process.waitFor();
+            if (exitCode == 0) {
+                ret.append("Compilation succeeded.\n");
+            } else {
+                ret.append("Compilation failed with exit code: ").append(exitCode).append("\n");
+            }
+        } catch (IOException | InterruptedException ex) {
+            ret.append("Error executing g++ command: ").append(ex.getMessage()).append("\n");
         }
         return Pair.of(exitCode, ret.toString());
     }
@@ -102,7 +133,7 @@ public class GCCCompileCurrentFileAction extends AnAction {
             return;
         }
         ConsoleView console = thisProject.getUserData(PyCharmGCCStartup.CONSOLE_VIEW_KEY);
-        ToolWindow window = ToolWindowManager.getInstance(thisProject).getToolWindow("GCC Output");
+        ToolWindow window = ToolWindowManager.getInstance(thisProject).getToolWindow("GCC/G++ Output");
         if ((console == null) | (window == null)) {
             return;
         }
@@ -147,6 +178,14 @@ public class GCCCompileCurrentFileAction extends AnAction {
         String curFileName = openedFiles[0].getName();
         String outname = null;
         String outpath = null;
+
+        // retrieve the file type of the active file
+        int lastIndex = curFileName.lastIndexOf('.');
+        String curFileType = null;
+        if (lastIndex > 0) {
+            curFileType = curFileName.substring(lastIndex + 1);
+        }
+
         if (SystemInfo.isWindows) {
             // if it's a Windows system, executables should be .exe
             outname = curFileName.substring(0, curFileName.lastIndexOf('.')) + ".exe";
@@ -159,10 +198,20 @@ public class GCCCompileCurrentFileAction extends AnAction {
             outpath = filePath.substring(0, filePath.lastIndexOf('.'));
         }
 
-        Pair<Integer, String> cmdRet = runGcc(psiFile, outname);
+        clearConsole();
+
+        // determine if we need to use GCC or G++ (.c or .cpp)
+        Pair<Integer, String> cmdRet = null;
+        if (curFileType.equals("c")) {
+            cmdRet = runGcc(psiFile, outname);
+        }
+        else {
+            cmdRet = runGplus(psiFile, outname);
+
+        }
         Integer cmdCode = cmdRet.getLeft();
         String cmdOut = cmdRet.getRight();
-        clearConsole();
+
         consoleWrite(cmdOut);
 
         if (cmdCode == 0) {
