@@ -17,7 +17,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
-
+import org.apache.commons.lang3.tuple.Pair;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -26,8 +26,9 @@ import java.io.InputStreamReader;
 public class GCCCompileCurrentFileAction extends AnAction {
     private Project thisProject = null;
 
-    private String runGcc(PsiFile targetPsiFile, String outputName) {
+    private Pair<Integer, String> runGcc(PsiFile targetPsiFile, String outputName) {
         // Run gcc and save the resulting file in the same directory
+        Integer exitCode = 0;
         StringBuilder ret = new StringBuilder();
         VirtualFile vFile = targetPsiFile.getOriginalFile().getVirtualFile();
         String filepath = vFile.getPath();
@@ -46,16 +47,51 @@ public class GCCCompileCurrentFileAction extends AnAction {
             reader.close();
 
             // wait for gcc to finish running before retrieving the result
-            int exitCode = process.waitFor();
+            exitCode = process.waitFor();
             if (exitCode == 0) {
-                ret.append("Compilation succeeded.\n");
+                ret.append("Compilation succeeded.\nSaved executable as '").append(outputName).append("'\n");
             } else {
                 ret.append("Compilation failed with exit code: ").append(exitCode).append("\n");
             }
         } catch (IOException | InterruptedException ex) {
             ret.append("Error executing gcc command: ").append(ex.getMessage()).append("\n");
         }
-        return ret.toString();
+        return Pair.of(exitCode, ret.toString());
+    }
+
+    private void runExecutable(String exePath) {
+        // run an executable and print to console while it's running
+        consoleWrite("\nRunning compiled executable...\n");
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder("./" + exePath);
+            processBuilder.redirectErrorStream(true);
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // read the
+                consoleWrite(line);
+            }
+            reader.close();
+
+            // wait for gcc to finish running before retrieving the result
+            int exitCode = process.waitFor();
+            consoleWrite("Program finished with exit code: " + exitCode + "\n");
+
+        } catch (IOException ex) {
+            consoleWrite("Error while running program executable: " + ex.getMessage() + "\n");
+        } catch (InterruptedException ex) {
+            consoleWrite("Error while waiting for the process to finish: " + ex.getMessage() + "\n");
+        }
+    }
+
+    private void clearConsole() {
+        ConsoleView console = thisProject.getUserData(PyCharmGCCStartup.CONSOLE_VIEW_KEY);
+        if (console == null) {
+            return;
+        }
+        console.clear();
     }
 
     private void consoleWrite(String words) {
@@ -113,8 +149,16 @@ public class GCCCompileCurrentFileAction extends AnAction {
 
         String curFileName = openedFiles[0].getName();
         String outname = curFileName.substring(0, curFileName.lastIndexOf('.')); // trim the filetype of the filename
-        String cmdOut = runGcc(psiFile, outname);
+
+        clearConsole();
+        Pair<Integer, String> cmdRet = runGcc(psiFile, outname);
+        Integer cmdCode = cmdRet.getLeft();
+        String cmdOut = cmdRet.getRight();
         consoleWrite(cmdOut);
+
+        if (cmdCode == 0) {
+            runExecutable(outname);
+        }
     }
 }
 
