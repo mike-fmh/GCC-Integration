@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.mikefmh"
-version = "1.0-SNAPSHOT"
+version = "0.1"
 
 repositories {
     mavenCentral()
@@ -20,20 +20,27 @@ intellij {
     plugins.set(listOf(/* Plugin Dependencies */))
 }
 
+intellij {
+    type.set("PC")
+    version.set("2022.2.2")
+}
+
+intellij {
+    type.set("PY")
+    version.set("2022.2.2")
+}
+
 tasks {
     // Set the JVM compatibility versions
     withType<JavaCompile> {
-        sourceCompatibility = "11"
-        targetCompatibility = "11"
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.jvmTarget = "17"
     }
 
-    patchPluginXml {
-        sinceBuild.set("222")
-        untilBuild.set("232.*")
-    }
+
 
     signPlugin {
         certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
