@@ -49,7 +49,7 @@ public class GCCCompileCurrentFileAction extends AnAction {
             // wait for gcc to finish running before retrieving the result
             exitCode = process.waitFor();
             if (exitCode == 0) {
-                ret.append("Compilation succeeded.\nSaved executable as '").append(outputName).append("'\n");
+                ret.append("Compilation succeeded.\n");
             } else {
                 ret.append("Compilation failed with exit code: ").append(exitCode).append("\n");
             }
@@ -61,9 +61,9 @@ public class GCCCompileCurrentFileAction extends AnAction {
 
     private void runExecutable(String exePath) {
         // run an executable and print to console while it's running
-        consoleWrite("\nRunning compiled executable...\n");
+        consoleWrite("Running " + exePath + "\n");
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("./" + exePath);
+            ProcessBuilder processBuilder = new ProcessBuilder(exePath);
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
 
@@ -71,7 +71,7 @@ public class GCCCompileCurrentFileAction extends AnAction {
             String line;
             while ((line = reader.readLine()) != null) {
                 // read the
-                consoleWrite(line);
+                consoleWrite(line + "\n");
             }
             reader.close();
 
@@ -149,7 +149,7 @@ public class GCCCompileCurrentFileAction extends AnAction {
 
         String curFileName = openedFiles[0].getName();
         String outname = curFileName.substring(0, curFileName.lastIndexOf('.')); // trim the filetype of the filename
-
+        String outpath = filePath.substring(0, filePath.lastIndexOf('.'));
         clearConsole();
         Pair<Integer, String> cmdRet = runGcc(psiFile, outname);
         Integer cmdCode = cmdRet.getLeft();
@@ -157,7 +157,8 @@ public class GCCCompileCurrentFileAction extends AnAction {
         consoleWrite(cmdOut);
 
         if (cmdCode == 0) {
-            runExecutable(outname);
+            consoleWrite("Saved compiled executable as " + outpath + "\n");
+            runExecutable(outpath);
         }
     }
 }
