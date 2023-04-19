@@ -1,4 +1,4 @@
-package gccIntegration;
+package gccintegration;
 
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.project.Project;
@@ -12,7 +12,7 @@ public class ConsoleWindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         // get the console view that was created in the startup activity
-        ConsoleView GCCConsole = project.getUserData(PyCharmGCCStartup.CONSOLE_VIEW_KEY);
+        ConsoleView GCCConsole = project.getUserData(ProjectStartup.CONSOLE_VIEW_KEY);
         if (GCCConsole == null) {
             return;
         }

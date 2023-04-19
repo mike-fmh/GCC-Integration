@@ -4,25 +4,11 @@ plugins {
     id("org.jetbrains.intellij") version "1.13.1"
 }
 
-group = "com.mikefmh"
-version = "0.1"
+group = "com.mikefmh.gcc-integration"
+version = "1.0"
 
 repositories {
     mavenCentral()
-}
-
-// Configure Gradle IntelliJ Plugin
-// Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
-intellij {
-    version.set("2022.2.4")
-    type.set("IC") // Target IDE Platform
-
-    plugins.set(listOf(/* Plugin Dependencies */))
-}
-
-intellij {
-    type.set("PC")
-    version.set("2022.2.2")
 }
 
 intellij {

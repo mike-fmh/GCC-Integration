@@ -1,4 +1,4 @@
-package gccIntegration;
+package gccintegration;
 
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleView;
@@ -8,8 +8,8 @@ import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.util.Key;
 import org.jetbrains.annotations.NotNull;
 
-public class PyCharmGCCStartup implements StartupActivity {
-    public static final Key<ConsoleView> CONSOLE_VIEW_KEY = new Key<>("CustomConsole.ConsoleView");
+public class ProjectStartup implements StartupActivity {
+    public static final Key<ConsoleView> CONSOLE_VIEW_KEY = new Key<>("gccConsole.ConsoleView");
     // this public var will store the custom console view used to display gcc outputs
     @Override
     public void runActivity(@NotNull Project project) {

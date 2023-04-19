@@ -1,4 +1,4 @@
-package gccIntegration;
+package gccintegration;
 
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.execution.ui.ConsoleView;
@@ -119,7 +119,7 @@ public class GCCCompileCurrentFileAction extends AnAction {
     }
 
     private void clearConsole() {
-        ConsoleView console = thisProject.getUserData(PyCharmGCCStartup.CONSOLE_VIEW_KEY);
+        ConsoleView console = thisProject.getUserData(ProjectStartup.CONSOLE_VIEW_KEY);
         if (console == null) {
             return;
         }
@@ -132,7 +132,7 @@ public class GCCCompileCurrentFileAction extends AnAction {
         if (thisProject == null) {
             return;
         }
-        ConsoleView console = thisProject.getUserData(PyCharmGCCStartup.CONSOLE_VIEW_KEY);
+        ConsoleView console = thisProject.getUserData(ProjectStartup.CONSOLE_VIEW_KEY);
         ToolWindow window = ToolWindowManager.getInstance(thisProject).getToolWindow("GCC/G++ Output");
         if ((console == null) | (window == null)) {
             return;

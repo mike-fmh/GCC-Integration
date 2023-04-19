@@ -1,8 +1,8 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-    <id>com.mikefmh.GCC-Integration</id>
-    <version>0.1</version>
+    <id>com.mikefmh.gcc-integration</id>
+    <version>1.0</version>
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
@@ -29,14 +29,14 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="GCC/G++ Output" anchor="bottom" factoryClass="gccIntegration.ConsoleWindowFactory"/>
-        <postStartupActivity implementation="gccIntegration.PyCharmGCCStartup"/>
+        <toolWindow id="GCC/G++ Output" anchor="bottom" factoryClass="gccintegration.ConsoleWindowFactory"/>
+        <postStartupActivity implementation="gccintegration.ProjectStartup"/>
     </extensions>
     <actions>
         <action id="GccCompileCurrentFile"
-                class="gccIntegration.GCCCompileCurrentFileAction"
+                class="gccintegration.GCCCompileCurrentFileAction"
                 text="Compile Current File"
-                description="PyCharmGCC tries to compile the active file with GCC/G++. Upon a successful compilation, the file will also be run.">
+                description="Compile the active c/cpp file with GCC/G++. Upon a successful compilation, the file will also be run.">
             <keyboard-shortcut keymap="$default" first-keystroke="alt G"/>
         </action>
     </actions>

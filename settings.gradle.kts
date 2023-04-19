@@ -1,1 +1,1 @@
-rootProject.name = "PyCharmGCC"
+rootProject.name = "gcc-integration"
