@@ -1,4 +1,4 @@
-# Documentation
+# GCC-Integration
 
 gcc-integration is a JetBrains IDE Plugin specifically designed for IDEs that do not have c/cpp support such as PyCharm. Its functionality is simple - it adds a keyboard shortcut that can run the GCC/G++ compiler on the active file (GCC must be already installed and in your system PATH).
 
@@ -27,4 +27,4 @@ Note that this plugin does not currently support passing arguments into compiled
 
 If your code requires parameters to run, you'll need to manually run the executable that the plugin compiles and pass in your parameters the usual way.
 
-![preview](plugin-preview.png)
+![preview](docs/plugin-preview.png)
