@@ -1,6 +1,8 @@
-<iframe width="384px" height="319px" src="https://plugins.jetbrains.com/embeddable/card/21535"></iframe>
+### Download Plugin
 
-<iframe width="245px" height="48px" src="https://plugins.jetbrains.com/embeddable/install/21535"></iframe>
+[JetBrains Marketplace](https://plugins.jetbrains.com/plugin/21535-gcc-g--integration)
+
+[Latest GitHub Release](https://github.com/mike-fmh/gcc-integration/releases)
 
 # GCC-Integration
 
