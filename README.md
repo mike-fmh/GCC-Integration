@@ -21,6 +21,10 @@ Run the command `brew install gcc`
 
 ## Usage
 
-If the file that's open in the editor is of type .c or .cpp, press `alt + G` to send it straight to the GCC/G++ compiler in a new IDE Tool Window. If the file successfully compiles, this plugin will also run the created executable in the same toolwindow.
-  
+If the file that's open in the editor is of type .c or .cpp, press `alt + G` to send it straight to the GCC/G++ compiler in a new IDE Tool Window. If the file successfully compiles, this plugin will also run the created executable in the same toolwindow (with no arguments).
+
+Note that this plugin does not currently support passing arguments into compiled files. After it successfully compiles and tries to run programs that requires parameters, although it will compile successfully, the run will fail. 
+
+If your code requires parameters to run, you'll need to manually run the executable that the plugin compiles and pass in your parameters the usual way.
+
 ![preview](docs/plugin-preview.png)
