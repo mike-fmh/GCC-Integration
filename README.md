@@ -1,3 +1,9 @@
+### Download Plugin
+
+[JetBrains Marketplace](https://plugins.jetbrains.com/plugin/21535-gcc-g--integration)
+
+[Latest GitHub Release](https://github.com/mike-fmh/gcc-integration/releases)
+
 # GCC-Integration
 
 gcc-integration is a JetBrains IDE Plugin specifically designed for IDEs that do not have c/cpp support such as PyCharm. Its functionality is simple - it adds a keyboard shortcut that can run the GCC/G++ compiler on the active file (GCC must be already installed and in your system PATH).
