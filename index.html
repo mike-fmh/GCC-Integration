@@ -351,10 +351,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gcc-integration">GCC-Integration</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows">Windows</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mac">Mac</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
 </ul>
             </nav>
         </div>
@@ -368,15 +370,31 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="documentation">
 <h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">#</a></h1>
-<section id="gcc-integration">
-<h2>GCC-Integration<a class="headerlink" href="#gcc-integration" title="Permalink to this heading">#</a></h2>
 <p>gcc-integration is a JetBrains IDE Plugin specifically designed for IDEs that do not have c/cpp support such as PyCharm. Its functionality is simple - it adds a keyboard shortcut that can run the GCC/G++ compiler on the active file (GCC must be already installed and in your system PATH).</p>
 <p>The default keyboard shortcut is <code class="docutils literal notranslate"><span class="pre">alt</span> <span class="pre">+</span> <span class="pre">G</span></code>.</p>
-<section id="usage">
-<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h3>
-<p>If the file that’s open in the editor is of type .c or .cpp, press <code class="docutils literal notranslate"><span class="pre">alt</span> <span class="pre">+</span> <span class="pre">G</span></code> to send it straight to the GCC/G++ compiler in a new IDE Tool Window. If the file successfully compiles, this plugin will also run the created executable in the same toolwindow.</p>
-<p><img alt="preview" src="_images/plugin-preview.png" /></p>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">GCC</span></code> must be installed separately. To download, follow these steps:</p>
+<section id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Visit <a class="reference external" href="https://sourceforge.net/projects/mingw/">https://sourceforge.net/projects/mingw/</a> and download.</p></li>
+<li><p>In the GUI under “basic setup”, check off <code class="docutils literal notranslate"><span class="pre">mingw32</span></code> and <code class="docutils literal notranslate"><span class="pre">mingw32gcc-g++</span></code></p></li>
+<li><p>Click “Installation &gt; Apply Changes”</p></li>
+<li><p>Add MingW32 to your System path (<code class="docutils literal notranslate"><span class="pre">C:\MinGW\bin</span></code>)</p></li>
+</ol>
 </section>
+<section id="mac">
+<h3>Mac<a class="headerlink" href="#mac" title="Permalink to this heading">#</a></h3>
+<p>Run the command <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">gcc</span></code></p>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<p>If the file that’s open in the editor is of type .c or .cpp, press <code class="docutils literal notranslate"><span class="pre">alt</span> <span class="pre">+</span> <span class="pre">G</span></code> to send it straight to the GCC/G++ compiler in a new IDE Tool Window. If the file successfully compiles, this plugin will also run the created executable in the same toolwindow (with no arguments).</p>
+<p>Note that this plugin does not currently support passing arguments into compiled files. After it successfully compiles and tries to run programs that requires parameters, although it will compile successfully, the run will fail.</p>
+<p>If your code requires parameters to run, you’ll need to manually run the executable that the plugin compiles and pass in your parameters the usual way.</p>
+<p><img alt="preview" src="_images/plugin-preview.png" /></p>
 </section>
 <div class="toctree-wrapper compound">
 </div>
@@ -440,10 +458,12 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gcc-integration">GCC-Integration</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows">Windows</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mac">Mac</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
 </ul>
   </nav></div>
 
