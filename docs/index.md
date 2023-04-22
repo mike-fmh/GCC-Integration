@@ -27,7 +27,7 @@ If the file that's open in the editor is of type .c or .cpp, press `alt + G` to 
 
 ### Modifying Compilation/Runtime Settings
 
-After version 2, you're able to edit the behavior of how this plugin compiles and runs your code.
+After version 1.1, you're able to edit the behavior of how this plugin compiles and runs your code.
 
 By adding inline comments to the active C/C++ file above all code, you're able to modify how the code is compiled or add parameters for when the plugin runs the current file's executable.
 
