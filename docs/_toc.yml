@@ -5,4 +5,4 @@ format: jb-book
 root: index
 chapters:
   - file: releases
-  - file: external_links
+  - file: download
