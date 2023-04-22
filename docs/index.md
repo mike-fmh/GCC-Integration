@@ -4,6 +4,8 @@ gcc-integration is a JetBrains IDE Plugin specifically designed for IDEs that do
 
 The default keyboard shortcut is `alt + G`.
 
+---- 
+
 ## Dependencies
 
 `GCC` must be installed separately. To download, follow these steps:
@@ -18,6 +20,20 @@ The default keyboard shortcut is `alt + G`.
 ### Mac
 
 Run the command `brew install gcc`
+
+----
+
+## Installation
+
+You can either install directly through PyCharm, or install from its GitHub releases.
+
+- To install directly through PyCharm, open `PyCharm --> Settings --> Plugins` and search GCC/G++ Integration on the marketplace
+
+- To manually install, visit the [latest GitHub release](https://github.com/mike-fmh/gcc-integration/releases) and download the `.jar`. Open `PyCharm --> Settings --> Plugins`, click the Settings cog and choose "Install Plugin from disk..."
+
+Note that each version of PyCharm needs a specific plugin file, for example versions ending in 231 will only be compatibility with PyCharm version 231.
+
+----
 
 ## Usage
 
