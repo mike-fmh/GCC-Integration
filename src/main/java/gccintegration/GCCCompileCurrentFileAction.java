@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class GCCCompileCurrentFileAction extends AnAction {
     private Project thisProject = null;
@@ -219,6 +220,8 @@ public class GCCCompileCurrentFileAction extends AnAction {
                     runExecutable(outpath);
                 }
             }
+            List<String> comments = OptionParse.getBeginComments(thisProject, editor);
+            consoleWrite("Comments: " + comments + "\n");
         }
     }
 }
