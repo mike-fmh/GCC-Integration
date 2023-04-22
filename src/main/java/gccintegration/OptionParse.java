@@ -14,9 +14,13 @@ public class OptionParse {
     private static final Pattern COMMENT_PATTERN = Pattern.compile("^//.*");
     // pattern must occur at the start of a line (^) because we want lines that are only comments
     private static final Pattern WHITESPACE_PATTERN = Pattern.compile("^\\s*$");
+
+    /**
+     * Return commented lines above all code of the active file
+     */
     // is the lines only composed of spaces?
     public static List<String> getBeginComments(Project project, Editor editor) {
-        // return commented lines placed above all code of the current file
+        // return commented lines above all code of the active file
         PsiDocumentManager psiDocumentManager = PsiDocumentManager.getInstance(project);
         Document document = editor.getDocument();
         PsiFile psiFile = psiDocumentManager.getPsiFile(document);
@@ -32,7 +36,7 @@ public class OptionParse {
                     for (String line : lines) {
                         if (COMMENT_PATTERN.matcher(line).find()) {
                             // is the line a comment?
-                            comments.add(line.trim());
+                            comments.add(line.trim().split("//")[1]); // remove the "//" from the comment
                         } else if (WHITESPACE_PATTERN.matcher(line).find()) {
                             // line is not a comment, but it's an empty line
                             // empty lines --> keep reading comments
