@@ -44,3 +44,5 @@ By default, no parameters will be passed to the active file when it's run after 
     int main() {};
 
 This supports adding files, integers, or anything else as parameters. If you add a file, treat it as if you're cd'd into the same directory as your c/cpp file.
+
+![preview](param-preview.png)
