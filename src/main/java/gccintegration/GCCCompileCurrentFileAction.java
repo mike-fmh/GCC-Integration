@@ -23,6 +23,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GCCCompileCurrentFileAction extends AnAction {
     private Project thisProject = null;
@@ -91,11 +94,24 @@ public class GCCCompileCurrentFileAction extends AnAction {
         return Pair.of(exitCode, ret.toString());
     }
 
-    private void runExecutable(String exePath) {
+    private void runExecutable(String exePath, List<String> params) {
         // run an executable and print to console while it's running
-        consoleWrite("Running " + exePath + "\n");
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder(exePath);
+            File exeFile = new File(exePath);
+            File workingDirectory = exeFile.getParentFile();
+            List<String> fullCmd = new ArrayList<>(params);
+
+            // isolate the exe file's name
+            String[] exefileName = exePath.split("/");
+            String fileName = exefileName[exefileName.length - 1];
+            // add the exe file to the beginning of the full command
+            fullCmd.add(0, "./" + fileName);
+            // convert the full command list to a string for printing
+            String fullCmdString = String.join(" ", fullCmd);
+
+            consoleWrite("Running with parameters: " + params + "\n" + fullCmdString + "\n");
+            ProcessBuilder processBuilder = new ProcessBuilder(fullCmd);
+            processBuilder.directory(workingDirectory);
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
 
@@ -216,7 +232,8 @@ public class GCCCompileCurrentFileAction extends AnAction {
 
                 if (cmdCode == 0) {
                     consoleWrite("Saved compiled executable as " + outpath + "\n");
-                    runExecutable(outpath);
+                    List<String> params = OptionParse.getExeParams(thisProject, editor);
+                    runExecutable(outpath, params);
                 }
             }
         }

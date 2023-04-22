@@ -21,10 +21,26 @@ Run the command `brew install gcc`
 
 ## Usage
 
-If the file that's open in the editor is of type .c or .cpp, press `alt + G` to send it straight to the GCC/G++ compiler in a new IDE Tool Window. If the file successfully compiles, this plugin will also run the created executable in the same toolwindow (with no arguments).
-
-Note that this plugin does not currently support passing arguments into compiled files. After it successfully compiles and tries to run programs that requires parameters, although it will compile successfully, the run will fail. 
-
-If your code requires parameters to run, you'll need to manually run the executable that the plugin compiles and pass in your parameters the usual way.
+If the file that's open in the editor is of type .c or .cpp, press `alt + G` to send it straight to the GCC/G++ compiler in a new IDE Tool Window. If the file successfully compiles, this plugin will also run the created executable in the same toolwindow.
 
 ![preview](plugin-preview.png)
+
+### Modifying Compilation/Runtime Settings
+
+After version 1.1, you're able to edit the behavior of how this plugin compiles and runs your code.
+
+By adding inline comments to the active C/C++ file above all code, you're able to modify how the code is compiled or add parameters for when the plugin runs the current file's executable.
+
+#### Settings Syntax:
+- Add parameters when running the compiled exe:
+  - `[param1, param2, ...]`
+
+### Adding Arguments/Parameters 
+
+By default, no parameters will be passed to the active file when it's run after compilation. To add parameters, add a comment above all code in the active file listing all desired parameters:
+
+    // [param1, param2, param3, ...]
+    #include <stdio.h>
+    int main() {};
+
+This supports adding files, integers, or anything else as parameters. If you add a file, treat it as if you're cd'd into the same directory as your c/cpp file.

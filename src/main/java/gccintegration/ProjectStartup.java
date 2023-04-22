@@ -14,7 +14,7 @@ public class ProjectStartup implements StartupActivity {
     @Override
     public void runActivity(@NotNull Project project) {
         // StartupActivity.runActivity -> Runs on IDE startup
-        StartupManager.getInstance(project).runWhenProjectIsInitialized(() -> {
+        StartupManager.getInstance(project).runAfterOpened(() -> {
             project.putUserData(CONSOLE_VIEW_KEY, new ConsoleViewImpl(project, true));
             // Store a new Console View instance in the project's userdata
             // so we don't need to recreate it everytime the keyboard shortcut is pressed
