@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiPlainText;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -51,5 +52,27 @@ public class OptionParse {
             }
         }
         return comments;
+    }
+
+    /**
+     * Return a list of params specified in the current file formatted
+     * // [param1, param2, etc]
+     */
+    public static List<String> getExeParams(Project project, Editor editor) {
+        List<String> allComments = getBeginComments(project, editor);
+        Pattern paramComment = Pattern.compile("\\s?[.*]");
+        for (String comment : allComments) {
+            if (paramComment.matcher(comment).find()) {
+                // if the line matches "// [param1, param2, ...]
+                // parse it and return
+
+                // replace "[", "]", " ", with ""
+                comment = comment.replace("[", "").replace("]", "").replace(" ", "");
+                // transform the string "param1,param2" into a list
+                // \\s*,\\s* splits along commas and ignores whitespaces
+                return Arrays.asList(comment.split("\\s*,\\s*"));
+            }
+        }
+        return new ArrayList<>();  // return nothing if user doesnt specify any params
     }
 }
