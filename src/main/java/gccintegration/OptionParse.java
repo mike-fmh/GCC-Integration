@@ -60,7 +60,7 @@ public class OptionParse {
      */
     public static List<String> getExeParams(Project project, Editor editor) {
         List<String> allComments = getBeginComments(project, editor);
-        Pattern paramComment = Pattern.compile("\\s?[.*]");
+        Pattern paramComment = Pattern.compile("\\s?\\[.*]");
         for (String comment : allComments) {
             if (paramComment.matcher(comment).find()) {
                 // if the line matches "// [param1, param2, ...]
