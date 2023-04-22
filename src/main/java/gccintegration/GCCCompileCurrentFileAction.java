@@ -102,8 +102,8 @@ public class GCCCompileCurrentFileAction extends AnAction {
             List<String> fullCmd = new ArrayList<>(params);
 
             // isolate the exe file's name
-            String[] sfileName = exePath.split("/");
-            String fileName = sfileName[sfileName.length - 1];
+            String[] exefileName = exePath.split("/");
+            String fileName = exefileName[exefileName.length - 1];
             // add the exe file to the beginning of the full command
             fullCmd.add(0, "./" + fileName);
             // convert the full command list to a string for printing

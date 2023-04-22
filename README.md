@@ -38,6 +38,13 @@ After version 2, you're able to edit the behavior of how this plugin compiles an
 
 By adding inline comments to the active C/C++ file above all code, you're able to modify how the code is compiled or add parameters for when the plugin runs the current file's executable.
 
+    // [param1, param2, param3, ...]
+    #include <stdio.h>
+    int main() {};
+
+
+Comments made above the code will be used for the plugin's config settings, while any comments after the actual code begins will be ignored by the plugin.
+
 #### Settings Syntax:
 - Add parameters when running the compiled exe:
     - `[param1, param2, ...]`
@@ -46,8 +53,6 @@ By adding inline comments to the active C/C++ file above all code, you're able t
 
 By default, no parameters will be passed to the active file when it's run after compilation. To add parameters, add a comment above all code in the active file listing all desired parameters:
 
-    // [param1, param2, param3, ...]
-    #include <stdio.h>
-    int main() {};
-
 This supports adding files, integers, or anything else as parameters. If you add a file, treat it as if you're cd'd into the same directory as your c/cpp file.
+
+![](docs/param-preview.png)
