@@ -58,7 +58,7 @@ public class OptionParse {
      * Return a list of params specified in the current file formatted
      * // [param1, param2, etc]
      */
-    public static List<String> getExeParams(Project project, Editor editor) {
+    public static List<String> getChosenExeParams(Project project, Editor editor) {
         List<String> allComments = getBeginComments(project, editor);
         Pattern paramComment = Pattern.compile("\\s?\\[.*]");
         for (String comment : allComments) {
@@ -74,5 +74,33 @@ public class OptionParse {
             }
         }
         return new ArrayList<>();  // return nothing if user doesnt specify any params
+    }
+
+    /**
+     * @return List of starting comments that specify source files
+     * Must be formatted
+     *
+     * // source1, source2, etc
+     *
+     */
+    public static List<String> getChosenSourceFiles(Project project, Editor editor, String mainSrcPath) {
+        List<String> allComments = getBeginComments(project, editor);
+        Pattern sourceComment = Pattern.compile("^(?!.*]$).*"); // match lines that don't end in "]"
+        for (String comment : allComments) {
+            if (sourceComment.matcher(comment).find()) {
+                comment = comment.replace(" ", "");
+                List<String> returnList = new ArrayList<>(Arrays.asList(comment.split("\\s*,\\s*")));
+
+                // we need to remove the main source file from the "returnList" so we don't input it twice into gcc
+                // if the user has included the main source file in their comment
+                String[] mainSrcFilenames = mainSrcPath.split("/");
+                String mainSrcFilename = mainSrcFilenames[mainSrcFilenames.length - 1];;
+                returnList.remove(mainSrcFilename);
+
+                returnList.add(0, mainSrcPath);
+                return returnList;
+            }
+        }
+        return new ArrayList<>();
     }
 }

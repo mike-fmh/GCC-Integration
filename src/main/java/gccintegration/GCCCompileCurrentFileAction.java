@@ -24,56 +24,58 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class GCCCompileCurrentFileAction extends AnAction {
     private Project thisProject = null;
 
-    private Pair<Integer, String> runGcc(PsiFile targetPsiFile, String outputName) {
-        // Run gcc and save the resulting file in the same directory
-        consoleWrite("Compiling using GCC\n");
-        Integer exitCode = 0;
-        StringBuilder ret = new StringBuilder();
-        VirtualFile vFile = targetPsiFile.getOriginalFile().getVirtualFile();
-        String filepath = vFile.getPath();
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder("gcc", filepath, "-o", outputName);
-            processBuilder.directory(new File(targetPsiFile.getContainingDirectory().getVirtualFile().getPath()));
-            processBuilder.redirectErrorStream(true); // we want to be able to print errors
-            Process process = processBuilder.start();
-
-            // Read gcc's output
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                ret.append(line).append("\n");
+    /**
+     * Isolate the filename from filepaths
+     * @param filePaths String List of full filepaths
+     * @return String List of filenames
+     */
+    private List<String> getFileNames(List<String> filePaths) {
+        List<String> fileNames = new ArrayList<>();
+        for (String file : filePaths) {
+            if (file.contains("/")) {
+                // isolate the file's name
+                String[] filePath = file.split("/");
+                fileNames.add(filePath[filePath.length - 1]);
             }
-            reader.close();
-
-            // wait for gcc to finish running before retrieving the result
-            exitCode = process.waitFor();
-            if (exitCode == 0) {
-                ret.append("Compilation succeeded.\n");
-            } else {
-                ret.append("Compilation failed with exit code: ").append(exitCode).append("\n");
+            else {
+                fileNames.add(file);
             }
-        } catch (IOException | InterruptedException ex) {
-            ret.append("Error executing gcc command: ").append(ex.getMessage()).append("\n");
         }
-        return Pair.of(exitCode, ret.toString());
+        return fileNames;
     }
 
-    private Pair<Integer, String> runGplus(PsiFile targetPsiFile, String outputName) {
-        // Run the same as runGcc, but uses g++ instead (for .cpp files)
-        consoleWrite("Compiling using G++\n");
+    /**
+     *
+     * @param sourceFiles the source files to compile
+     * @param outputName the name of the output executable
+     * @param cpp Is it a .cpp file? (default .c)
+     * @return Pair of int, string (return code, std output)
+     */
+    private Pair<Integer, String> runCompiler(List<String> sourceFiles, String outputName, Boolean cpp) {
+        consoleWrite((cpp ? "Compiling using G++ " : "Compiling using GCC ") + sourceFiles + "\n");
         Integer exitCode = 0;
         StringBuilder ret = new StringBuilder();
-        VirtualFile vFile = targetPsiFile.getOriginalFile().getVirtualFile();
-        String filepath = vFile.getPath();
+
+        String mainSrcPath = sourceFiles.get(0);
+        File workingDir = new File(mainSrcPath).getParentFile();
+        sourceFiles = getFileNames(sourceFiles);
+        System.out.println(sourceFiles);
+        sourceFiles.add(0, (cpp ? "g++" : "gcc"));
+        sourceFiles.add("-o");
+        sourceFiles.add(outputName);
+
+        // convert the full command list to a string for printing
+        String fullCmdString = String.join(" ", sourceFiles);
+        consoleWrite("> " + fullCmdString + "\n");
+
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("g++", filepath, "-o", outputName);
-            processBuilder.directory(new File(targetPsiFile.getContainingDirectory().getVirtualFile().getPath()));
+            ProcessBuilder processBuilder = new ProcessBuilder(sourceFiles);
+            processBuilder.directory(workingDir);
             processBuilder.redirectErrorStream(true); // we want to be able to print errors
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -89,7 +91,7 @@ public class GCCCompileCurrentFileAction extends AnAction {
                 ret.append("Compilation failed with exit code: ").append(exitCode).append("\n");
             }
         } catch (IOException | InterruptedException ex) {
-            ret.append("Error executing g++ command: ").append(ex.getMessage()).append("\n");
+            ret.append("Error executing ").append(cpp ? "g++" : "gcc").append(" command: ").append(ex.getMessage()).append("\n");
         }
         return Pair.of(exitCode, ret.toString());
     }
@@ -216,12 +218,12 @@ public class GCCCompileCurrentFileAction extends AnAction {
 
             // determine if we need to use GCC or G++ (.c or .cpp)
             Pair<Integer, String> cmdRet = null;
-            if (curFileType.equals("c")) {
+            if ((curFileType.equals("c")) | (curFileType.equals("cpp"))) {
+                VirtualFile vFile = psiFile.getOriginalFile().getVirtualFile();
+                String filepath = vFile.getPath();
+                List<String> sourceFiles = OptionParse.getChosenSourceFiles(thisProject, editor, filepath);
                 clearConsole();
-                cmdRet = runGcc(psiFile, outname);
-            } else if (curFileType.equals("cpp")) {
-                clearConsole();
-                cmdRet = runGplus(psiFile, outname);
+                cmdRet = runCompiler(sourceFiles, outname, curFileType.equals("cpp"));
             }
 
             if (cmdRet != null) {
@@ -232,7 +234,7 @@ public class GCCCompileCurrentFileAction extends AnAction {
 
                 if (cmdCode == 0) {
                     consoleWrite("Saved compiled executable as " + outpath + "\n");
-                    List<String> params = OptionParse.getExeParams(thisProject, editor);
+                    List<String> params = OptionParse.getChosenExeParams(thisProject, editor);
                     runExecutable(outpath, params);
                 }
             }
