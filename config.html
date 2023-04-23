@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Releases &#8212; GCC Integration</title>
+    <title>Plugin Configuration &#8212; GCC Integration</title>
   
   
   
@@ -61,11 +61,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'releases';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'config';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Download Plugin" href="download.html" />
-    <link rel="prev" title="Plugin Configuration" href="config.html" />
+    <link rel="next" title="Releases" href="releases.html" />
+    <link rel="prev" title="JetBrains GCC Integration" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -157,8 +157,8 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="config.html">Plugin Configuration</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Releases</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Plugin Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="download.html">Download Plugin</a></li>
 </ul>
 
@@ -231,7 +231,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/mike-fmh/gcc-integration/issues/new?title=Issue%20on%20page%20%2Freleases.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/mike-fmh/gcc-integration/issues/new?title=Issue%20on%20page%20%2Fconfig.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -261,7 +261,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/releases.md" target="_blank"
+      <li><a href="_sources/config.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -330,7 +330,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -341,11 +343,21 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Releases</h1>
+    <h1>Plugin Configuration</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#settings-syntax">Settings Syntax:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-arguments-parameters">Adding Arguments/Parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-additional-source-files">Adding Additional Source Files</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -355,13 +367,52 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="releases">
-<h1>Releases<a class="headerlink" href="#releases" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="plugin-configuration">
+<h1>Plugin Configuration<a class="headerlink" href="#plugin-configuration" title="Permalink to this heading">#</a></h1>
+<p>Adding inline comments to the active C/C++ file above all code can modify the behavior of compilation/running of the active file’s code.</p>
+<p><img alt="config preview" src="_images/config-preview.png" /></p>
+<p>In this example we’ve added “test.cpp” as an additional source file for the plugin when it compiles <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>. We’ve also chosen the parameters of “hello” &amp; “world” for the <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> file. The plugin determines which file is the “active file” based on which one you’ve clicked onto last.</p>
+<hr class="docutils" />
+<section id="settings-syntax">
+<h2>Settings Syntax:<a class="headerlink" href="#settings-syntax" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">v1.0</span></code> - Initial release</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">v1.1</span></code> - Supports adding params when running compiled executable</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">v1.2</span></code> - You can now add additional source files other than the active file</p></li>
+<li><p>Add parameters when running the compiled exe:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">[param1,</span> <span class="pre">param2,</span> <span class="pre">...]</span></code></p></li>
 </ul>
+</li>
+<li><p>Add more source files in the compilation stage by listing their relative paths:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">+file1.c,</span> <span class="pre">+file2.c,</span> <span class="pre">+../file3.c,</span> <span class="pre">...</span></code>
+(or split different files across newlines, without commas)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="adding-arguments-parameters">
+<h2>Adding Arguments/Parameters<a class="headerlink" href="#adding-arguments-parameters" title="Permalink to this heading">#</a></h2>
+<p>By default, no parameters will be passed to the active file when it’s run after compilation. To add parameters, add a comment above all code in the active file listing all desired parameters:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>// [param1, param2, param3, ...]
+#include &lt;stdio.h&gt;
+int main() {};
+</pre></div>
+</div>
+<p>This supports adding files, integers, or anything else as parameters. If you add a file, treat it as if you’re cd’d into the same directory as your c/cpp file.</p>
+<p><img alt="preview" src="_images/param-preview.png" /></p>
+</section>
+<section id="adding-additional-source-files">
+<h2>Adding Additional Source Files<a class="headerlink" href="#adding-additional-source-files" title="Permalink to this heading">#</a></h2>
+<p>Adding comments above the code that begin with <code class="docutils literal notranslate"><span class="pre">+file.c</span></code> will tell the plugin to compile the current file along with the ones specified.</p>
+<p>You can use the syntax:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>// +file.cpp
+// +file2.cpp
+</pre></div>
+</div>
+<p>or list multiple files in one line like:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>// +file.cpp, file2.cpp
+</pre></div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -396,20 +447,20 @@ document.write(`
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="config.html"
+       href="index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Plugin Configuration</p>
+        <p class="prev-next-title">JetBrains GCC Integration</p>
       </div>
     </a>
     <a class="right-next"
-       href="download.html"
+       href="releases.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Download Plugin</p>
+        <p class="prev-next-title">Releases</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -422,6 +473,22 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#settings-syntax">Settings Syntax:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-arguments-parameters">Adding Arguments/Parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-additional-source-files">Adding Additional Source Files</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

@@ -1,4 +1,4 @@
-# Documentation
+# JetBrains GCC Integration
 
 gcc-integration is a JetBrains IDE Plugin specifically designed for IDEs that do not have c/cpp support such as PyCharm. Its functionality is simple - it adds a keyboard shortcut that can run the GCC/G++ compiler on the active file (GCC must be already installed and in your system PATH).
 
@@ -8,7 +8,7 @@ The default keyboard shortcut is `alt + G`.
 
 ## Dependencies
 
-`GCC` must be installed separately. To download, follow these steps:
+GCC must be installed separately. To download, follow these steps:
 
 ### Windows
 
@@ -43,24 +43,5 @@ If the file that's open in the editor is of type .c or .cpp, press `alt + G` to 
 
 ### Modifying Compilation/Runtime Settings
 
-You can add optional settings to the plugin per each file.
+To view how to add optional settings to the plugin's behavior per each file, read [here](config.md)
 
-Adding inline comments to the active C/C++ file above all code can modify the behavior of compilation/running of the active file's code.
-
-#### Settings Syntax:
-- Add parameters when running the compiled exe:
-  - `// [param1, param2, ...]`
-- Add more source files in the compilation stage by listing their relative paths:
-  - `// file1.c, file2.c, ../file3.c, ...`
-
-### Adding Arguments/Parameters 
-
-By default, no parameters will be passed to the active file when it's run after compilation. To add parameters, add a comment above all code in the active file listing all desired parameters:
-
-    // [param1, param2, param3, ...]
-    #include <stdio.h>
-    int main() {};
-
-This supports adding files, integers, or anything else as parameters. If you add a file, treat it as if you're cd'd into the same directory as your c/cpp file.
-
-![preview](param-preview.png)

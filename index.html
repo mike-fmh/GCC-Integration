@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Documentation &#8212; GCC Integration</title>
+    <title>JetBrains GCC Integration &#8212; GCC Integration</title>
   
   
   
@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Releases" href="releases.html" />
+    <link rel="next" title="Plugin Configuration" href="config.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -151,11 +151,12 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1 current active">
                 <a class="reference internal" href="#">
-                    Documentation
+                    JetBrains GCC Integration
                 </a>
             </li>
         </ul>
         <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="config.html">Plugin Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="download.html">Download Plugin</a></li>
 </ul>
@@ -341,7 +342,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Documentation</h1>
+    <h1>JetBrains GCC Integration</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -358,11 +359,7 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-compilation-runtime-settings">Modifying Compilation/Runtime Settings</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#settings-syntax">Settings Syntax:</a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-arguments-parameters">Adding Arguments/Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-compilation-runtime-settings">Modifying Compilation/Runtime Settings</a></li>
 </ul>
 </li>
 </ul>
@@ -376,14 +373,14 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="documentation">
-<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="jetbrains-gcc-integration">
+<h1>JetBrains GCC Integration<a class="headerlink" href="#jetbrains-gcc-integration" title="Permalink to this heading">#</a></h1>
 <p>gcc-integration is a JetBrains IDE Plugin specifically designed for IDEs that do not have c/cpp support such as PyCharm. Its functionality is simple - it adds a keyboard shortcut that can run the GCC/G++ compiler on the active file (GCC must be already installed and in your system PATH).</p>
 <p>The default keyboard shortcut is <code class="docutils literal notranslate"><span class="pre">alt</span> <span class="pre">+</span> <span class="pre">G</span></code>.</p>
 <hr class="docutils" />
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">GCC</span></code> must be installed separately. To download, follow these steps:</p>
+<p>GCC must be installed separately. To download, follow these steps:</p>
 <section id="windows">
 <h3>Windows<a class="headerlink" href="#windows" title="Permalink to this heading">#</a></h3>
 <ol class="arabic simple">
@@ -415,34 +412,7 @@ document.write(`
 <p><img alt="preview" src="_images/plugin-preview.png" /></p>
 <section id="modifying-compilation-runtime-settings">
 <h3>Modifying Compilation/Runtime Settings<a class="headerlink" href="#modifying-compilation-runtime-settings" title="Permalink to this heading">#</a></h3>
-<p>You can add optional settings to the plugin per each file.</p>
-<p>Adding inline comments to the active C/C++ file above all code can modify the behavior of compilation/running of the active file’s code.</p>
-<section id="settings-syntax">
-<h4>Settings Syntax:<a class="headerlink" href="#settings-syntax" title="Permalink to this heading">#</a></h4>
-<ul class="simple">
-<li><p>Add parameters when running the compiled exe:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">[param1,</span> <span class="pre">param2,</span> <span class="pre">...]</span></code></p></li>
-</ul>
-</li>
-<li><p>Add more source files in the compilation stage by listing their relative paths:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">file1.c,</span> <span class="pre">file2.c,</span> <span class="pre">../file3.c,</span> <span class="pre">...</span></code></p></li>
-</ul>
-</li>
-</ul>
-</section>
-</section>
-<section id="adding-arguments-parameters">
-<h3>Adding Arguments/Parameters<a class="headerlink" href="#adding-arguments-parameters" title="Permalink to this heading">#</a></h3>
-<p>By default, no parameters will be passed to the active file when it’s run after compilation. To add parameters, add a comment above all code in the active file listing all desired parameters:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>// [param1, param2, param3, ...]
-#include &lt;stdio.h&gt;
-int main() {};
-</pre></div>
-</div>
-<p>This supports adding files, integers, or anything else as parameters. If you add a file, treat it as if you’re cd’d into the same directory as your c/cpp file.</p>
-<p><img alt="preview" src="_images/param-preview.png" /></p>
+<p>To view how to add optional settings to the plugin’s behavior per each file, read <a class="reference internal" href="config.html"><span class="doc std std-doc">here</span></a></p>
 </section>
 </section>
 <div class="toctree-wrapper compound">
@@ -481,11 +451,11 @@ int main() {};
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="right-next"
-       href="releases.html"
+       href="config.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Releases</p>
+        <p class="prev-next-title">Plugin Configuration</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -514,11 +484,7 @@ int main() {};
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-compilation-runtime-settings">Modifying Compilation/Runtime Settings</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#settings-syntax">Settings Syntax:</a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-arguments-parameters">Adding Arguments/Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-compilation-runtime-settings">Modifying Compilation/Runtime Settings</a></li>
 </ul>
 </li>
 </ul>
