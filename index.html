@@ -356,6 +356,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mac">Mac</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-compilation-runtime-settings">Modifying Compilation/Runtime Settings</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#settings-syntax">Settings Syntax:</a></li>
@@ -379,6 +380,7 @@ document.write(`
 <h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">#</a></h1>
 <p>gcc-integration is a JetBrains IDE Plugin specifically designed for IDEs that do not have c/cpp support such as PyCharm. Its functionality is simple - it adds a keyboard shortcut that can run the GCC/G++ compiler on the active file (GCC must be already installed and in your system PATH).</p>
 <p>The default keyboard shortcut is <code class="docutils literal notranslate"><span class="pre">alt</span> <span class="pre">+</span> <span class="pre">G</span></code>.</p>
+<hr class="docutils" />
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">GCC</span></code> must be installed separately. To download, follow these steps:</p>
@@ -396,20 +398,36 @@ document.write(`
 <p>Run the command <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">gcc</span></code></p>
 </section>
 </section>
+<hr class="docutils" />
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
+<p>You can either install directly through PyCharm, or install from its GitHub releases.</p>
+<ul class="simple">
+<li><p>To install directly through PyCharm, open <code class="docutils literal notranslate"><span class="pre">PyCharm</span> <span class="pre">--&gt;</span> <span class="pre">Settings</span> <span class="pre">--&gt;</span> <span class="pre">Plugins</span></code> and search GCC/G++ Integration on the marketplace</p></li>
+<li><p>To manually install, visit the <a class="reference external" href="https://github.com/mike-fmh/gcc-integration/releases">latest GitHub release</a> and download the <code class="docutils literal notranslate"><span class="pre">.jar</span></code>. Open <code class="docutils literal notranslate"><span class="pre">PyCharm</span> <span class="pre">--&gt;</span> <span class="pre">Settings</span> <span class="pre">--&gt;</span> <span class="pre">Plugins</span></code>, click the Settings cog and choose “Install Plugin from disk…”</p></li>
+</ul>
+<p>Note that each version of PyCharm needs a specific plugin file, for example versions ending in 231 will only be compatibility with PyCharm version 231.</p>
+</section>
+<hr class="docutils" />
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
 <p>If the file that’s open in the editor is of type .c or .cpp, press <code class="docutils literal notranslate"><span class="pre">alt</span> <span class="pre">+</span> <span class="pre">G</span></code> to send it straight to the GCC/G++ compiler in a new IDE Tool Window. If the file successfully compiles, this plugin will also run the created executable in the same toolwindow.</p>
 <p><img alt="preview" src="_images/plugin-preview.png" /></p>
 <section id="modifying-compilation-runtime-settings">
 <h3>Modifying Compilation/Runtime Settings<a class="headerlink" href="#modifying-compilation-runtime-settings" title="Permalink to this heading">#</a></h3>
-<p>After version 1.1, you’re able to edit the behavior of how this plugin compiles and runs your code.</p>
-<p>By adding inline comments to the active C/C++ file above all code, you’re able to modify how the code is compiled or add parameters for when the plugin runs the current file’s executable.</p>
+<p>You can add optional settings to the plugin per each file.</p>
+<p>Adding inline comments to the active C/C++ file above all code can modify the behavior of compilation/running of the active file’s code.</p>
 <section id="settings-syntax">
 <h4>Settings Syntax:<a class="headerlink" href="#settings-syntax" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p>Add parameters when running the compiled exe:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">[param1,</span> <span class="pre">param2,</span> <span class="pre">...]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">[param1,</span> <span class="pre">param2,</span> <span class="pre">...]</span></code></p></li>
+</ul>
+</li>
+<li><p>Add more source files in the compilation stage by listing their relative paths:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">file1.c,</span> <span class="pre">file2.c,</span> <span class="pre">../file3.c,</span> <span class="pre">...</span></code></p></li>
 </ul>
 </li>
 </ul>
@@ -494,6 +512,7 @@ int main() {};
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mac">Mac</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-compilation-runtime-settings">Modifying Compilation/Runtime Settings</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#settings-syntax">Settings Syntax:</a></li>
