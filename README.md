@@ -10,6 +10,8 @@ gcc-integration is a JetBrains IDE Plugin specifically designed for IDEs that do
 
 The default keyboard shortcut is `alt + G`.
 
+----
+
 ## Dependencies
 
 `GCC` must be installed separately. To download, follow these steps:
@@ -25,6 +27,20 @@ The default keyboard shortcut is `alt + G`.
 
 Run the command `brew install gcc`
 
+----
+
+## Installation
+
+You can either install directly through PyCharm, or install from its GitHub releases.
+
+- To install directly through PyCharm, open `PyCharm --> Settings --> Plugins` and search GCC/G++ Integration on the marketplace
+
+- To manually install, visit the [latest GitHub release](https://github.com/mike-fmh/gcc-integration/releases) and download the `.jar`. Open `PyCharm --> Settings --> Plugins`, click the Settings cog and choose "Install Plugin from disk..."
+
+Note that each version of PyCharm needs a specific plugin file, for example versions ending in 231 will only be compatibility with PyCharm version 231.
+
+----
+
 ## Usage
 
 If the file that's open in the editor is of type .c or .cpp, press `alt + G` to send it straight to the GCC/G++ compiler in a new IDE Tool Window. If the file successfully compiles, this plugin will also run the created executable in the same toolwindow.
@@ -34,17 +50,16 @@ If the file that's open in the editor is of type .c or .cpp, press `alt + G` to 
 
 ### Modifying Compilation/Runtime Settings
 
-After version 1.1, you're able to edit the behavior of how this plugin compiles and runs your code.
+You can add optional settings to the plugin per each file.
 
-By adding inline comments to the active C/C++ file above all code, you're able to modify how the code is compiled or add parameters for when the plugin runs the current file's executable.
+Adding inline comments to the active C/C++ file above all code can modify the behavior of compilation/running of the active file's code.
 
-    // [param1, param2, param3, ...]
-    #include <stdio.h>
-    int main() {};
-
-
-Comments made above the code will be used for the plugin's config settings, while any comments after the actual code begins will be ignored by the plugin.
-
+#### Settings Syntax:
+- Add parameters when running the compiled exe:
+  - `// [param1, param2, ...]`
+- Add more source files in the compilation stage by listing their relative paths:
+  - `// file1.c, file2.c, ../file3.c, ...`
+  
 #### Settings Syntax:
 - Add parameters when running the compiled exe:
     - `[param1, param2, ...]`

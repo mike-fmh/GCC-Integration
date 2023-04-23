@@ -1,192 +1,25 @@
 package gccintegration;
 
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.execution.ui.ConsoleView;
-import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 import org.apache.commons.lang3.tuple.Pair;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class GCCCompileCurrentFileAction extends AnAction {
-    private Project thisProject = null;
-
-    private Pair<Integer, String> runGcc(PsiFile targetPsiFile, String outputName) {
-        // Run gcc and save the resulting file in the same directory
-        consoleWrite("Compiling using GCC\n");
-        Integer exitCode = 0;
-        StringBuilder ret = new StringBuilder();
-        VirtualFile vFile = targetPsiFile.getOriginalFile().getVirtualFile();
-        String filepath = vFile.getPath();
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder("gcc", filepath, "-o", outputName);
-            processBuilder.directory(new File(targetPsiFile.getContainingDirectory().getVirtualFile().getPath()));
-            processBuilder.redirectErrorStream(true); // we want to be able to print errors
-            Process process = processBuilder.start();
-
-            // Read gcc's output
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                ret.append(line).append("\n");
-            }
-            reader.close();
-
-            // wait for gcc to finish running before retrieving the result
-            exitCode = process.waitFor();
-            if (exitCode == 0) {
-                ret.append("Compilation succeeded.\n");
-            } else {
-                ret.append("Compilation failed with exit code: ").append(exitCode).append("\n");
-            }
-        } catch (IOException | InterruptedException ex) {
-            ret.append("Error executing gcc command: ").append(ex.getMessage()).append("\n");
-        }
-        return Pair.of(exitCode, ret.toString());
-    }
-
-    private Pair<Integer, String> runGplus(PsiFile targetPsiFile, String outputName) {
-        // Run the same as runGcc, but uses g++ instead (for .cpp files)
-        consoleWrite("Compiling using G++\n");
-        Integer exitCode = 0;
-        StringBuilder ret = new StringBuilder();
-        VirtualFile vFile = targetPsiFile.getOriginalFile().getVirtualFile();
-        String filepath = vFile.getPath();
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder("g++", filepath, "-o", outputName);
-            processBuilder.directory(new File(targetPsiFile.getContainingDirectory().getVirtualFile().getPath()));
-            processBuilder.redirectErrorStream(true); // we want to be able to print errors
-            Process process = processBuilder.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                ret.append(line).append("\n");
-            }
-            reader.close();
-            exitCode = process.waitFor();
-            if (exitCode == 0) {
-                ret.append("Compilation succeeded.\n");
-            } else {
-                ret.append("Compilation failed with exit code: ").append(exitCode).append("\n");
-            }
-        } catch (IOException | InterruptedException ex) {
-            ret.append("Error executing g++ command: ").append(ex.getMessage()).append("\n");
-        }
-        return Pair.of(exitCode, ret.toString());
-    }
-
-    private void runExecutable(String exePath, List<String> params) {
-        // run an executable and print to console while it's running
-        try {
-            File exeFile = new File(exePath);
-            File workingDirectory = exeFile.getParentFile();
-            List<String> fullCmd = new ArrayList<>(params);
-
-            // isolate the exe file's name
-            String[] exefileName = exePath.split("/");
-            String fileName = exefileName[exefileName.length - 1];
-            // add the exe file to the beginning of the full command
-            fullCmd.add(0, "./" + fileName);
-            // convert the full command list to a string for printing
-            String fullCmdString = String.join(" ", fullCmd);
-
-            consoleWrite("Running with parameters: " + params + "\n" + fullCmdString + "\n");
-            ProcessBuilder processBuilder = new ProcessBuilder(fullCmd);
-            processBuilder.directory(workingDirectory);
-            processBuilder.redirectErrorStream(true);
-            Process process = processBuilder.start();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // read the
-                consoleWrite(line + "\n");
-            }
-            reader.close();
-
-            // wait for gcc to finish running before retrieving the result
-            int exitCode = process.waitFor();
-            consoleWrite("Program finished with exit code: " + exitCode + "\n");
-
-        } catch (IOException ex) {
-            consoleWrite("Error while running program executable: " + ex.getMessage() + "\n");
-        } catch (InterruptedException ex) {
-            consoleWrite("Error while waiting for the process to finish: " + ex.getMessage() + "\n");
-        }
-    }
-
-    private void clearConsole() {
-        ConsoleView console = thisProject.getUserData(ProjectStartup.CONSOLE_VIEW_KEY);
-        if (console == null) {
-            return;
-        }
-        console.clear();
-    }
-
-    private void consoleWrite(String words) {
-        // must be called after 'actionPerformed' is run
-        // because actionPerformed sets up thisProject variable
-        if (thisProject == null) {
-            return;
-        }
-        ConsoleView console = thisProject.getUserData(ProjectStartup.CONSOLE_VIEW_KEY);
-        ToolWindow window = ToolWindowManager.getInstance(thisProject).getToolWindow("GCC/G++ Output");
-        if ((console == null) | (window == null)) {
-            return;
-        }
-        ContentFactory contentFactory = ContentFactory.getInstance();
-        Content content = contentFactory.createContent(console.getComponent(), "", true);
-        window.getContentManager().addContent(content);
-        console.print(words, ConsoleViewContentType.NORMAL_OUTPUT);
-        window.activate(null);
-    }
-
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        thisProject = event.getProject(); // user's project instance
+        Project thisProject = event.getProject(); // user's project instance
         if (thisProject == null) {
             return;
         }
         Editor editor = FileEditorManager.getInstance(thisProject).getSelectedTextEditor(); // editor session
         if (editor == null) {
-            return;
-        }
-
-        // GET CURRENT FILE's PATH
-        // we need to get the current file as a
-        // Document -> PsiFile -> String
-        // to get the absolute filepath
-        Document currentDoc = null;
-        PsiFile psiFile = null;
-        String filePath = null;
-        try {
-            currentDoc = FileEditorManager.getInstance(thisProject).getSelectedTextEditor().getDocument();
-            VirtualFile currentFile = FileDocumentManager.getInstance().getFile(currentDoc);
-            String fileName = currentFile.getPath();
-            psiFile = PsiDocumentManager.getInstance(thisProject).getPsiFile(currentDoc);
-            VirtualFile vFile = psiFile.getOriginalFile().getVirtualFile();
-            filePath = vFile.getPath();
-        }
-        catch (NullPointerException ex) {
             return;
         }
 
@@ -201,7 +34,13 @@ public class GCCCompileCurrentFileAction extends AnAction {
         if (lastIndex > 0) {
             curFileType = curFileName.substring(lastIndex + 1);
         }
-
+        String filePath = null;
+        try {
+            filePath = SysUtil.getCurrentFilepath(thisProject);
+        }
+        catch (NullPointerException ex) {
+            return;
+        }
         if (curFileType != null) {
             if (SystemInfo.isWindows) {
                 // if it's a Windows system, executables should be .exe
@@ -216,24 +55,22 @@ public class GCCCompileCurrentFileAction extends AnAction {
 
             // determine if we need to use GCC or G++ (.c or .cpp)
             Pair<Integer, String> cmdRet = null;
-            if (curFileType.equals("c")) {
-                clearConsole();
-                cmdRet = runGcc(psiFile, outname);
-            } else if (curFileType.equals("cpp")) {
-                clearConsole();
-                cmdRet = runGplus(psiFile, outname);
+            if ((curFileType.equals("c")) | (curFileType.equals("cpp"))) {
+                List<String> sourceFiles = OptionParse.getChosenSourceFiles(thisProject, editor, filePath);
+                SysUtil.clearConsole(thisProject);
+                cmdRet = SysUtil.runCompiler(sourceFiles, outname, curFileType.equals("cpp"), thisProject);
             }
 
             if (cmdRet != null) {
                 Integer cmdCode = cmdRet.getLeft();
                 String cmdOut = cmdRet.getRight();
 
-                consoleWrite(cmdOut);
+                SysUtil.consoleWrite(cmdOut, thisProject);
 
                 if (cmdCode == 0) {
-                    consoleWrite("Saved compiled executable as " + outpath + "\n");
-                    List<String> params = OptionParse.getExeParams(thisProject, editor);
-                    runExecutable(outpath, params);
+                    SysUtil.consoleWrite("Saved compiled executable as " + outpath + "\n", thisProject);
+                    List<String> params = OptionParse.getChosenExeParams(thisProject, editor);
+                    SysUtil.runExecutable(outpath, params, thisProject);
                 }
             }
         }
