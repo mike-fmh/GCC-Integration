@@ -1,4 +1,5 @@
 package gccintegration;
+
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -15,6 +16,8 @@ public class OptionParse {
     private static final Pattern COMMENT_PATTERN = Pattern.compile("^//.*");
     // pattern must occur at the start of a line (^) because we want lines that are only comments
     private static final Pattern WHITESPACE_PATTERN = Pattern.compile("^\\s*$");
+    private static final Pattern SOURCEFILE_PATTERN = Pattern.compile("^(?!.*]$).*"); // match lines that don't end in "]"
+    private static final Pattern PARAM_PATTERN = Pattern.compile("\\s?\\[.*]");
 
     /**
      * Return commented lines above all code of the active file
@@ -60,9 +63,8 @@ public class OptionParse {
      */
     public static List<String> getChosenExeParams(Project project, Editor editor) {
         List<String> allComments = getBeginComments(project, editor);
-        Pattern paramComment = Pattern.compile("\\s?\\[.*]");
         for (String comment : allComments) {
-            if (paramComment.matcher(comment).find()) {
+            if (PARAM_PATTERN.matcher(comment).find()) {
                 // if the line matches "// [param1, param2, ...]
                 // parse it and return
 
@@ -86,9 +88,8 @@ public class OptionParse {
     public static List<String> getChosenSourceFiles(Project project, Editor editor, String mainSrcPath) {
         List<String> returnList = new ArrayList<>();
         List<String> allComments = getBeginComments(project, editor);
-        Pattern sourceComment = Pattern.compile("^(?!.*]$).*"); // match lines that don't end in "]"
         for (String comment : allComments) {
-            if (sourceComment.matcher(comment).find()) {
+            if (SOURCEFILE_PATTERN.matcher(comment).find()) {
                 comment = comment.replace(" ", "");
                 returnList.addAll(Arrays.asList(comment.split("\\s*,\\s*")));
                 // we need to remove the main source file from the "returnList" so we don't input it twice into gcc
