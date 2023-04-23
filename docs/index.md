@@ -43,13 +43,15 @@ If the file that's open in the editor is of type .c or .cpp, press `alt + G` to 
 
 ### Modifying Compilation/Runtime Settings
 
-After version 1.1, you're able to edit the behavior of how this plugin compiles and runs your code.
+You can add optional settings to the plugin per each file.
 
-By adding inline comments to the active C/C++ file above all code, you're able to modify how the code is compiled or add parameters for when the plugin runs the current file's executable.
+Adding inline comments to the active C/C++ file above all code can modify the behavior of compilation/running of the active file's code.
 
 #### Settings Syntax:
 - Add parameters when running the compiled exe:
-  - `[param1, param2, ...]`
+  - `// [param1, param2, ...]`
+- Add more source files in the compilation stage by listing their relative paths:
+  - `// file1.c, file2.c, ../file3.c, ...`
 
 ### Adding Arguments/Parameters 
 
