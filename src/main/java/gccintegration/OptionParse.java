@@ -16,7 +16,7 @@ public class OptionParse {
     private static final Pattern COMMENT_PATTERN = Pattern.compile("^//.*");
     // pattern must occur at the start of a line (^) because we want lines that are only comments
     private static final Pattern WHITESPACE_PATTERN = Pattern.compile("^\\s*$");
-    private static final Pattern SOURCEFILE_PATTERN = Pattern.compile("^(?!.*]$).*"); // match lines that don't end in "]"
+    private static final Pattern SOURCEFILE_PATTERN = Pattern.compile("\\s?\\+.*");
     private static final Pattern PARAM_PATTERN = Pattern.compile("\\s?\\[.*]");
 
     /**
@@ -90,15 +90,13 @@ public class OptionParse {
         List<String> allComments = getBeginComments(project, editor);
         for (String comment : allComments) {
             if (SOURCEFILE_PATTERN.matcher(comment).find()) {
-                comment = comment.replace(" ", "");
+                comment = comment.replace(" ", "").replace("+", "");
                 returnList.addAll(Arrays.asList(comment.split("\\s*,\\s*")));
                 // we need to remove the main source file from the "returnList" so we don't input it twice into gcc
                 // if the user has included the main source file in their comment
                 String[] mainSrcFilenames = mainSrcPath.split("/");
                 String mainSrcFilename = mainSrcFilenames[mainSrcFilenames.length - 1];;
                 returnList.remove(mainSrcFilename); // if it doesn't contain mainSrcFilename, .remove() does nothing
-
-                break;
             }
         }
         returnList.add(0, mainSrcPath);
