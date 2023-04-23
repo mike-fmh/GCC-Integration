@@ -4,5 +4,6 @@
 format: jb-book
 root: index
 chapters:
+  - file: config
   - file: releases
   - file: download
