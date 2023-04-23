@@ -29,6 +29,17 @@ import java.util.List;
 public class GCCCompileCurrentFileAction extends AnAction {
     private Project thisProject = null;
 
+    private String getCurrentFile(Project project) {
+        // GET CURRENT FILE's PATH
+        // we need to get the current file as a
+        // Document -> PsiFile -> String
+        // to get the absolute filepath
+        Document currentDoc = FileEditorManager.getInstance(project).getSelectedTextEditor().getDocument();
+        PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(currentDoc);
+        VirtualFile vFile = psiFile.getOriginalFile().getVirtualFile();
+        return vFile.getPath();
+    }
+
     /**
      * Isolate the filename from filepaths
      * @param filePaths String List of full filepaths
@@ -37,16 +48,20 @@ public class GCCCompileCurrentFileAction extends AnAction {
     private List<String> getFileNames(List<String> filePaths) {
         List<String> fileNames = new ArrayList<>();
         for (String file : filePaths) {
-            if (file.contains("/")) {
-                // isolate the file's name
-                String[] filePath = file.split("/");
-                fileNames.add(filePath[filePath.length - 1]);
-            }
-            else {
-                fileNames.add(file);
-            }
+            fileNames.add(getFileName(file));
         }
         return fileNames;
+    }
+
+    private String getFileName(String file) {
+        if (file.contains("/")) {
+            // isolate the file's name
+            String[] filePath = file.split("/");
+            return filePath[filePath.length - 1];
+        }
+        else {
+            return file;
+        }
     }
 
     /**
@@ -60,18 +75,17 @@ public class GCCCompileCurrentFileAction extends AnAction {
         consoleWrite((cpp ? "Compiling using G++ " : "Compiling using GCC ") + sourceFiles + "\n");
         Integer exitCode = 0;
         StringBuilder ret = new StringBuilder();
-
         String mainSrcPath = sourceFiles.get(0);
+        sourceFiles.remove(0);
+        sourceFiles.add(0, getFileName(mainSrcPath));
         File workingDir = new File(mainSrcPath).getParentFile();
-        sourceFiles = getFileNames(sourceFiles);
-        System.out.println(sourceFiles);
         sourceFiles.add(0, (cpp ? "g++" : "gcc"));
         sourceFiles.add("-o");
         sourceFiles.add(outputName);
 
         // convert the full command list to a string for printing
         String fullCmdString = String.join(" ", sourceFiles);
-        consoleWrite("> " + fullCmdString + "\n");
+        consoleWrite("% " + fullCmdString + "\n");
 
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(sourceFiles);
@@ -103,15 +117,13 @@ public class GCCCompileCurrentFileAction extends AnAction {
             File workingDirectory = exeFile.getParentFile();
             List<String> fullCmd = new ArrayList<>(params);
 
-            // isolate the exe file's name
-            String[] exefileName = exePath.split("/");
-            String fileName = exefileName[exefileName.length - 1];
+            String fileName = getFileName(exePath);
             // add the exe file to the beginning of the full command
             fullCmd.add(0, "./" + fileName);
             // convert the full command list to a string for printing
             String fullCmdString = String.join(" ", fullCmd);
 
-            consoleWrite("Running with parameters: " + params + "\n" + fullCmdString + "\n");
+            consoleWrite("Running with parameters: " + params + "\n% " + fullCmdString + "\n");
             ProcessBuilder processBuilder = new ProcessBuilder(fullCmd);
             processBuilder.directory(workingDirectory);
             processBuilder.redirectErrorStream(true);
@@ -121,10 +133,9 @@ public class GCCCompileCurrentFileAction extends AnAction {
             String line;
             while ((line = reader.readLine()) != null) {
                 // read the
-                consoleWrite(line + "\n");
+                consoleWrite("\t" + line + "\n");
             }
             reader.close();
-
             // wait for gcc to finish running before retrieving the result
             int exitCode = process.waitFor();
             consoleWrite("Program finished with exit code: " + exitCode + "\n");
@@ -173,24 +184,7 @@ public class GCCCompileCurrentFileAction extends AnAction {
             return;
         }
 
-        // GET CURRENT FILE's PATH
-        // we need to get the current file as a
-        // Document -> PsiFile -> String
-        // to get the absolute filepath
-        Document currentDoc = null;
-        PsiFile psiFile = null;
-        String filePath = null;
-        try {
-            currentDoc = FileEditorManager.getInstance(thisProject).getSelectedTextEditor().getDocument();
-            VirtualFile currentFile = FileDocumentManager.getInstance().getFile(currentDoc);
-            String fileName = currentFile.getPath();
-            psiFile = PsiDocumentManager.getInstance(thisProject).getPsiFile(currentDoc);
-            VirtualFile vFile = psiFile.getOriginalFile().getVirtualFile();
-            filePath = vFile.getPath();
-        }
-        catch (NullPointerException ex) {
-            return;
-        }
+
 
         VirtualFile[] openedFiles = FileEditorManager.getInstance(thisProject).getSelectedFiles();
         String curFileName = openedFiles[0].getName();
@@ -203,7 +197,13 @@ public class GCCCompileCurrentFileAction extends AnAction {
         if (lastIndex > 0) {
             curFileType = curFileName.substring(lastIndex + 1);
         }
-
+        String filePath = null;
+        try {
+            filePath = getCurrentFile(thisProject);
+        }
+        catch (NullPointerException ex) {
+            return;
+        }
         if (curFileType != null) {
             if (SystemInfo.isWindows) {
                 // if it's a Windows system, executables should be .exe
@@ -219,9 +219,7 @@ public class GCCCompileCurrentFileAction extends AnAction {
             // determine if we need to use GCC or G++ (.c or .cpp)
             Pair<Integer, String> cmdRet = null;
             if ((curFileType.equals("c")) | (curFileType.equals("cpp"))) {
-                VirtualFile vFile = psiFile.getOriginalFile().getVirtualFile();
-                String filepath = vFile.getPath();
-                List<String> sourceFiles = OptionParse.getChosenSourceFiles(thisProject, editor, filepath);
+                List<String> sourceFiles = OptionParse.getChosenSourceFiles(thisProject, editor, filePath);
                 clearConsole();
                 cmdRet = runCompiler(sourceFiles, outname, curFileType.equals("cpp"));
             }

@@ -84,23 +84,23 @@ public class OptionParse {
      *
      */
     public static List<String> getChosenSourceFiles(Project project, Editor editor, String mainSrcPath) {
+        List<String> returnList = new ArrayList<>();
         List<String> allComments = getBeginComments(project, editor);
         Pattern sourceComment = Pattern.compile("^(?!.*]$).*"); // match lines that don't end in "]"
         for (String comment : allComments) {
             if (sourceComment.matcher(comment).find()) {
                 comment = comment.replace(" ", "");
-                List<String> returnList = new ArrayList<>(Arrays.asList(comment.split("\\s*,\\s*")));
-
+                returnList.addAll(Arrays.asList(comment.split("\\s*,\\s*")));
                 // we need to remove the main source file from the "returnList" so we don't input it twice into gcc
                 // if the user has included the main source file in their comment
                 String[] mainSrcFilenames = mainSrcPath.split("/");
                 String mainSrcFilename = mainSrcFilenames[mainSrcFilenames.length - 1];;
-                returnList.remove(mainSrcFilename);
+                returnList.remove(mainSrcFilename); // if it doesn't contain mainSrcFilename, .remove() does nothing
 
-                returnList.add(0, mainSrcPath);
-                return returnList;
+                break;
             }
         }
-        return new ArrayList<>();
+        returnList.add(0, mainSrcPath);
+        return returnList;
     }
 }
