@@ -12,10 +12,7 @@ public class ConsoleWindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         // get the console view that was created in the startup activity
-        ConsoleView GCCConsole = project.getUserData(ProjectStartup.CONSOLE_VIEW_KEY);
-        if (GCCConsole == null) {
-            return;
-        }
+        ConsoleView GCCConsole = SysUtil.getStoredConsole(project);
         // create the console's content
         ContentFactory contentFactory = ContentFactory.getInstance();
         toolWindow.getContentManager().addContent(contentFactory.createContent(GCCConsole.getComponent(), "", false)); // we don't need a displayName
