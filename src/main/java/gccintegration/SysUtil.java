@@ -1,5 +1,6 @@
 package gccintegration;
 
+import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.editor.Document;
@@ -17,15 +18,24 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import com.intellij.openapi.util.Key;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SysUtil {
-    public static void clearConsole(Project project) {
-        ConsoleView console = project.getUserData(ProjectStartup.CONSOLE_VIEW_KEY);
+    private static final Key<ConsoleView> CONSOLE_VIEW_KEY = new com.intellij.openapi.util.Key<>("gccConsole.ConsoleView");
+
+    public static ConsoleView getStoredConsole(Project project) {
+        ConsoleView console = project.getUserData(CONSOLE_VIEW_KEY);
         if (console == null) {
-            return;
+            project.putUserData(CONSOLE_VIEW_KEY, new ConsoleViewImpl(project, true));
+            console = project.getUserData(CONSOLE_VIEW_KEY);
         }
+        return console;
+    }
+
+    public static void clearConsole(Project project) {
+        ConsoleView console = getStoredConsole(project);
         console.clear();
     }
 
@@ -33,9 +43,9 @@ public class SysUtil {
         // must be called after 'actionPerformed' is run
         // because actionPerformed sets up thisProject variable
 
-        ConsoleView console = project.getUserData(ProjectStartup.CONSOLE_VIEW_KEY);
+        ConsoleView console = getStoredConsole(project);
         ToolWindow window = ToolWindowManager.getInstance(project).getToolWindow("GCC/G++ Output");
-        if ((console == null) | (window == null)) {
+        if (window == null) {
             return;
         }
         ContentFactory contentFactory = ContentFactory.getInstance();
