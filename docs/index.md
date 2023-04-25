@@ -29,6 +29,8 @@ You can either install directly through PyCharm, or install from its GitHub rele
 
 - To install directly through PyCharm, open `PyCharm --> Settings --> Plugins` and search GCC/G++ Integration on the marketplace
 
+## Manual Install
+
 - To manually install, visit the [latest GitHub release](https://github.com/mike-fmh/gcc-integration/releases) and download the `.jar`. Open `PyCharm --> Settings --> Plugins`, click the Settings cog and choose "Install Plugin from disk..."
 
 Note that each version of PyCharm needs a specific plugin file, for example versions ending in 231 will only be compatibility with PyCharm version 231.
