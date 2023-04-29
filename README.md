@@ -59,7 +59,7 @@ Adding inline comments to the active C/C++ file above all code can modify the be
 
 In this example we've added `test.cpp` as an additional source file for the plugin when it compiles `main.cpp`. We've also chosen the parameters of "hello" & "world" for the `main.cpp` file. The plugin determines which file is the "active file" based on which one you've clicked onto last.
 
-As `main.cpp` is the active file while we press `alt + G` in this example, the plugin compiles it along with the specified additional source file `test.cpp`, and then runs the resulting executable with the specified params (hello, world). In this example, `test.h` simply has the declaration for the `testPrint()` function.
+As `main.cpp` is the active file while we press `alt + G` in this example, the plugin compiles it along with the specified additional source file `test.cpp`, and then runs the resulting executable with the specified params (hello, world).
 
 For more information on configuring these types of settings, read on!
 
