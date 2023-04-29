@@ -371,20 +371,21 @@ document.write(`
 <h1>Plugin Configuration<a class="headerlink" href="#plugin-configuration" title="Permalink to this heading">#</a></h1>
 <p>Adding inline comments to the active C/C++ file above all code can modify the behavior of compilation/running of the active file’s code.</p>
 <p><img alt="config preview" src="_images/config-preview.png" /></p>
-<p>In this example we’ve added “test.cpp” as an additional source file for the plugin when it compiles <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>. We’ve also chosen the parameters of “hello” &amp; “world” for the <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> file. The plugin determines which file is the “active file” based on which one you’ve clicked onto last.</p>
+<p>In this example we’ve added <code class="docutils literal notranslate"><span class="pre">test.cpp</span></code> as an additional source file for the plugin when it compiles <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>. We’ve also chosen the parameters of “hello” &amp; “world” for the <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> file. The plugin determines which file is the “active file” based on which one you’ve clicked onto last.</p>
+<p>As <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> is the active file while we press <code class="docutils literal notranslate"><span class="pre">alt</span> <span class="pre">+</span> <span class="pre">G</span></code> in this example, the plugin compiles it along with the specified additional source file <code class="docutils literal notranslate"><span class="pre">test.cpp</span></code>, and then runs the resulting executable with the specified params (hello, world).</p>
+<p>For more information on configuring these types of settings, read on!</p>
 <hr class="docutils" />
 <section id="settings-syntax">
 <h2>Settings Syntax:<a class="headerlink" href="#settings-syntax" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p>Add parameters when running the compiled exe:</p>
+<li><p><span class="xref myst">Adding Arguments/Parameters</span></p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">[param1,</span> <span class="pre">param2,</span> <span class="pre">...]</span></code></p></li>
 </ul>
 </li>
-<li><p>Add more source files in the compilation stage by listing their relative paths:</p>
+<li><p><span class="xref myst">Adding Additional Source Files</span></p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">+file1.c,</span> <span class="pre">+file2.c,</span> <span class="pre">+../file3.c,</span> <span class="pre">...</span></code>
-(or split different files across newlines, without commas)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">+file1.c,</span> <span class="pre">+file2.c,</span> <span class="pre">+../file3.c,</span> <span class="pre">...</span></code></p></li>
 </ul>
 </li>
 </ul>
@@ -397,7 +398,7 @@ document.write(`
 int main() {};
 </pre></div>
 </div>
-<p>This supports adding files, integers, or anything else as parameters. If you add a file, treat it as if you’re cd’d into the same directory as your c/cpp file.</p>
+<p>This supports adding files, integers, or anything else as parameters. For file paths in parameters, you can either use an absolute path, or a relative path from the active file’s directory.</p>
 <p><img alt="preview" src="_images/param-preview.png" /></p>
 </section>
 <section id="adding-additional-source-files">
