@@ -4,16 +4,19 @@ Adding inline comments to the active C/C++ file above all code can modify the be
 
 ![config preview](config-preview.png)
 
-In this example we've added "test.cpp" as an additional source file for the plugin when it compiles `main.cpp`. We've also chosen the parameters of "hello" & "world" for the `main.cpp` file. The plugin determines which file is the "active file" based on which one you've clicked onto last.
+In this example we've added `test.cpp` as an additional source file for the plugin when it compiles `main.cpp`. We've also chosen the parameters of "hello" & "world" for the `main.cpp` file. The plugin determines which file is the "active file" based on which one you've clicked onto last.
+
+As `main.cpp` is the active file while we press `alt + G` in this example, the plugin compiles it along with the specified additional source file `test.cpp`, and then runs the resulting executable with the specified params (hello, world).
+
+For more information on configuring these types of settings, read on!
 
 ----
 
 #### Settings Syntax:
-- Add parameters when running the compiled exe:
-    - `// [param1, param2, ...]`
-- Add more source files in the compilation stage by listing their relative paths:
+- [Adding Arguments/Parameters](#adding-argumentsparameters)
+    - `// [param1, param2, ...]` 
+- [Adding Additional Source Files](#adding-additional-source-files)
     - `// +file1.c, +file2.c, +../file3.c, ...`
-      (or split different files across newlines, without commas)
 
 ### Adding Arguments/Parameters
 
@@ -23,7 +26,7 @@ By default, no parameters will be passed to the active file when it's run after 
     #include <stdio.h>
     int main() {};
 
-This supports adding files, integers, or anything else as parameters. If you add a file, treat it as if you're cd'd into the same directory as your c/cpp file.
+This supports adding files, integers, or anything else as parameters. For file paths in parameters, you can either use an absolute path, or a relative path from the active file's directory.
 
 ![preview](param-preview.png)
 
