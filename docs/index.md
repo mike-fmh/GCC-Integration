@@ -43,7 +43,7 @@ If the file that's open in the editor is of type .c or .cpp, press `alt + G` to 
 
 ![preview](plugin-preview.png)
 
-### Modifying Compilation/Runtime Settings
+### Modifying the Plugin's Behavior
 
 To view how to add optional settings to the plugin's behavior per each file, read [here](config.md)
 
