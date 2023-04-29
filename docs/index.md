@@ -31,9 +31,9 @@ You can either install directly through PyCharm, or install from its GitHub rele
 
 ## Manual Install
 
-- To manually install, visit the [latest GitHub release](https://github.com/mike-fmh/gcc-integration/releases) and download the `.jar`. Open `PyCharm --> Settings --> Plugins`, click the Settings cog and choose "Install Plugin from disk..."
+- To manually install, visit the [latest GitHub release](https://github.com/mike-fmh/gcc-integration/releases) and download the `.jar`. Open `PyCharm --> Settings --> Plugins`, click the Settings cog and choose `Install Plugin from disk...`
 
-Note that each version of PyCharm needs a specific plugin file, for example versions ending in 231 will only be compatibility with PyCharm version 231.
+Note that each version of PyCharm needs a specific plugin file, for example the plugin version ending in 231 will only be compatibility with PyCharm version 231.
 
 ----
 
